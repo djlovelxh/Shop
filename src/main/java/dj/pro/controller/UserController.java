@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @RequestMapping(value = "/index")
     public String index(Model model){
+        System.out.println("###################");
         return "index";
     }
 }
