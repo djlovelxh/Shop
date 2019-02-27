@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+<!-- ========================== 自定义输出格式说明================================ -->
+    <!-- %p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL -->
+    <!-- #%r 输出自应用启动到输出该log信息耗费的毫秒数  -->
+    <!-- #%c 输出所属的类目，通常就是所在类的全名 -->
+    <!-- #%t 输出产生该日志事件的线程名 -->
+    <!-- #%n 输出一个回车换行符，Windows平台为“\r\n”，Unix平台为“\n” -->
+    <!-- #%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy MMM dd HH:mm:ss,SSS}，输出类似：2002年10月18日 22：10：28，921  -->
+    <!-- #%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)  -->
+    <!-- ========================================================================== -->
+
+    <!-- ========================== 输出方式说明================================ -->
+    <!-- Log4j提供的appender有以下几种:  -->
+    <!-- org.apache.log4j.ConsoleAppender(控制台),  -->
+    <!-- org.apache.log4j.FileAppender(文件),  -->
+    <!-- org.apache.log4j.DailyRollingFileAppender(每天产生一个日志文件), -->
+    <!-- org.apache.log4j.RollingFileAppender(文件大小到达指定尺寸的时候产生一个新的文件),  -->
+    <!-- org.apache.log4j.WriterAppender(将日志信息以流格式发送到任意指定的地方)   -->
+<!-- ========================================================================== -->
+	<!-- 输出到控制台中 -->
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" 
+				value="%d{yyyy-MM-dd HH:mm:ss} %-5p: %c{1}\:%L | %m%n" />  
+            <!-- "%-5p: [%t] [%c{3}.%M(%L)] | %m%n" -->
+            <!-- "%-5p: %m%n" -->
+		</layout>
+	</appender>
+	
+	<!-- 错误信息输出路径~~~~~~~~~~~begin~~~~~~~~~~~~~ -->
+    <!--<appender name="filelog_error_appender"-->
+        <!--class="org.apache.log4j.RollingFileAppender">-->
+        <!--&lt;!&ndash; 设置File参数：日志输出文件名 &ndash;&gt;-->
+        <!--<param name="File" value="E://gd12345//log//error.log" />-->
+        <!--&lt;!&ndash; 设置是否在重新启动服务时，在原有日志的基础添加新日志 &ndash;&gt;-->
+        <!--<param name="Append" value="true" />-->
+        <!--&lt;!&ndash; 设置文件大小 &ndash;&gt;-->
+        <!--<param name="MaxFileSize" value="50MB" />-->
+        <!--&lt;!&ndash; 设置文件备份 &ndash;&gt;-->
+        <!--<param name="MaxBackupIndex" value="10000" />-->
+        <!--&lt;!&ndash; 设置输出文件项目和格式 &ndash;&gt;-->
+        <!--<layout class="org.apache.log4j.PatternLayout">-->
+            <!--<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p: %c{1}\:%L - %m%n" />-->
+        <!--</layout>-->
+        <!---->
+        <!--&lt;!&ndash;限制输出级别&ndash;&gt;  -->
+		<!--<filter class="org.apache.log4j.varia.LevelRangeFilter">  -->
+		   <!--<param name="LevelMax" value="ERROR"/>  -->
+		   <!--<param name="LevelMin" value="ERROR"/>  -->
+		<!--</filter>-->
+    <!--</appender>-->
+	<appender name="filelog_error_appender"  class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<param name="File" value="E://gd12345//log//error//error.log" />
+		<param name="DatePattern" value="'uacd.'yyyy-MM-dd'.log'" />
+
+		<!-- 设置输出文件项目和格式 -->
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p: %c{1}\:%L - %m%n" />
+		</layout>
+
+		<!--限制输出级别-->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMax" value="ERROR"/>
+			<param name="LevelMin" value="ERROR"/>
+		</filter>
+	</appender>
+	<!-- 错误信息输出路径~~~~~~~~~~~end~~~~~~~~~~~~~~~ -->
+	
+	<!-- 普通日志输出路径,每天一个日志 ~~~~~~~~~begin~~~~~~~~~~~~~ -->  
+     <appender name="daily_Log" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="E://gd12345//log//daily//daily.log" />
+        <param name="DatePattern" value="'uacd.'yyyy-MM-dd'.log'" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss\} %-5p: %c{1}\:%L - %m%n" />     
+        </layout>
+        
+        <!--限制输出级别-->  
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">  
+		   <param name="LevelMax" value="WARN"/>  
+		   <param name="LevelMin" value="INFO"/>  
+		</filter>
+    </appender>
+    <!-- 普通日志输出路径,每天一个日志 ~~~~~~~~~end~~~~~~~~~~~~~~~ -->
+    
+	<root>
+		<priority value="info"/>
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="filelog_error_appender"/>
+		<appender-ref ref="daily_Log"/>
+	</root>
+</log4j:configuration>
